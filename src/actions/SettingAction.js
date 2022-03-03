@@ -1,8 +1,8 @@
-import ActionType from "./ActionType";
+import ActionType from './ActionType';
 
-const enableLoading = enable => ({ type: ActionType.ENABLE_LOADING, data: enable })
+const enableLoading = enable => ({ type: ActionType.ENABLE_LOADING, data: enable });
 
 const SettingAction = {
-    enableLoading
-}
-export default SettingAction
+    enableLoading,
+};
+export default SettingAction;

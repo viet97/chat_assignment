@@ -13,16 +13,13 @@ import Loading from './Loading';
 GoogleSignin.configure({
   webClientId: '297921877463-g316ir2cc0kv3ps3vdhbnsamtluomsbd.apps.googleusercontent.com',
 });
-const store = createStore(rootReducer)
+const store = createStore(rootReducer);
 
 export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <SafeAreaView style={{
-          flex: 1,
-          backgroundColor: "white"
-        }}>
+        <SafeAreaView style={styles.container}>
           <AppNavigator />
         </SafeAreaView>
         <Loading />
@@ -30,3 +27,11 @@ export default class App extends Component {
     );
   }
 }
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+});

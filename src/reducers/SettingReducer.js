@@ -1,16 +1,16 @@
-import ActionType from "../actions/ActionType"
+import ActionType from '../actions/ActionType';
 
 const initialState = {
-    loading: false
-}
+    loading: false,
+};
 
 export default function UserReducer(state = initialState, action) {
     switch (action.type) {
         case ActionType.ENABLE_LOADING:
             return {
-                loading: action.data
-            }
+                loading: action.data,
+            };
         default:
-            return state
+            return state;
     }
 }

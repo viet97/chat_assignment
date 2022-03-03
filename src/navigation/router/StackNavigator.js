@@ -9,7 +9,7 @@ const Stack = createStackNavigator();
 const AppStack = () => {
   return (
     <Stack.Navigator
-      headerMode={"none"}
+      headerMode={'none'}
       mode={'card'}
       screenOptions={{
         header: null,
@@ -19,9 +19,9 @@ const AppStack = () => {
         gestureDirection: 'horizontal',
       }}
     >
-      <Stack.Screen name={"login"} component={LoginScreen} />
-      <Stack.Screen name={"home"} component={HomeScreen} />
-      <Stack.Screen name={"chat"} component={ChatScreen} />
+      <Stack.Screen name={'login'} component={LoginScreen} />
+      <Stack.Screen name={'home'} component={HomeScreen} />
+      <Stack.Screen name={'chat'} component={ChatScreen} />
     </Stack.Navigator>
   );
 };

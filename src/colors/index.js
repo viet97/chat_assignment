@@ -85,4 +85,4 @@ export default {
     mainColor2: '#9E035D',
     harmonies: '#E4E5E6',
     back_drop_modal: 'rgba(0,0,0,0.25)',
-}
+};

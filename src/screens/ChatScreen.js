@@ -1,39 +1,41 @@
-import { firebase } from '@react-native-firebase/auth'
-import React, { Component } from 'react'
-import { Text, View, FlatList, TextInput, Pressable, StyleSheet, ToastAndroid, Clipboard, Platform } from 'react-native'
+import { firebase } from '@react-native-firebase/auth';
+import React, { Component, createRef } from 'react';
+import { Text, View, FlatList, TextInput, Pressable, StyleSheet, ToastAndroid, Clipboard, Platform } from 'react-native';
 import database from '@react-native-firebase/database';
 import { trim } from 'lodash';
 
 export default class ChatScreen extends Component {
     constructor(props) {
-        super(props)
-        this.chatId = props.route.params.chatId
-        this.isHost = props.route.params.isHost
-        this.ownId = firebase.auth().currentUser.uid
+        super(props);
+        this.chatId = props.route.params.chatId;
+        this.isHost = props.route.params.isHost;
+        this.ownId = firebase.auth().currentUser.uid;
         this.state = {
             messages: [],
-            input: ""
-        }
+            input: '',
+        };
+
+        this.listRef = createRef();
     }
 
     componentDidMount() {
         database()
             .ref(`${this.chatId}/messages`)
             .on('value', snapshot => {
-                this.setState({ messages: snapshot.val() })
-            })
+                this.setState({ messages: snapshot.val() });
+            });
     }
 
     renderItem = ({ item }) => {
-        const isOwnMessage = item.from === this.ownId
-        if (!item.msg || !item.from) return
+        const isOwnMessage = item.from === this.ownId;
+        if (!item.msg || !item.from) {return;}
         return (
             <View
                 style={{
-                    justifyContent: isOwnMessage ? "flex-end" : "flex-start",
+                    justifyContent: isOwnMessage ? 'flex-end' : 'flex-start',
                     marginHorizontal: 16,
                     marginTop: 8,
-                    flexDirection: 'row'
+                    flexDirection: 'row',
                 }}>
                 <View
                 >
@@ -42,68 +44,75 @@ export default class ChatScreen extends Component {
                     <View
                         style={{
                             flexDirection: 'row',
-                            alignSelf: isOwnMessage ? "flex-end" : "flex-start"
+                            alignSelf: isOwnMessage ? 'flex-end' : 'flex-start',
                         }}>
                         <View
                             style={{
                                 padding: 8,
                                 borderRadius: 24,
-                                backgroundColor: isOwnMessage ? "blue" : "gray",
+                                backgroundColor: isOwnMessage ? 'blue' : 'gray',
                             }}>
                             <Text
                                 style={{
-                                    color: isOwnMessage ? "white" : "black"
+                                    color: isOwnMessage ? 'white' : 'black',
                                 }}>{item.msg}</Text>
                         </View>
                     </View>
                 </View>
             </View>
-        )
+        );
     }
 
     onChangeText = (input) => {
-        this.setState({ input })
+        this.setState({ input });
     }
 
     send = () => {
         const { input } = this.state;
-        const trimInput = trim(input)
-        if (!trimInput) return
-        this.setState({ input: '' })
+        const trimInput = trim(input);
+        if (!trimInput) {return;}
+        this.setState({ input: '' });
+        const newMessage = {
+            from: this.ownId,
+            msg: trimInput,
+            timestamp: Date.now(),
+            userName: firebase.auth().currentUser.displayName,
+        };
         const ref = database()
-            .ref(`/${this.chatId}/messages`)
+            .ref(`/${this.chatId}/messages`);
         ref.transaction(messages => ([
             ...messages,
-            {
-                from: this.ownId,
-                msg: trimInput,
-                timestamp: Date.now(),
-                userName: firebase.auth().currentUser.displayName
-            }
-        ]))
-
+            newMessage,
+        ]));
+        this.setState((previousState) => ({
+            ...previousState,
+            messages: [...previousState?.messages, newMessage],
+        }));
+        setTimeout(() => {
+            this.listRef?.current?.scrollToEnd();
+        }, 300);
     }
 
     copyId = () => {
-        Clipboard.setString(`${this.chatId}`)
-        if (Platform.OS === "android") {
-            ToastAndroid.show("Chat id has been copied", ToastAndroid.SHORT)
+        Clipboard.setString(`${this.chatId}`);
+        if (Platform.OS === 'android') {
+            ToastAndroid.show('Chat id has been copied', ToastAndroid.SHORT);
         }
     }
 
     render() {
-        const { messages, input } = this.state
+        const { messages, input } = this.state;
         return (
             <View
                 style={{ flex: 1 }}>
                 <View
-                    style={{ flexDirection: "row", }}>
+                    style={{ flexDirection: 'row' }}>
                     <Pressable
                         hitSlop={16}
                         onPress={() => this.props.navigation.goBack()}>
                         <Text
                             style={{
-                                color: 'black'
+                                color: 'black',
                             }}>
                             Leave room
                         </Text>
@@ -118,13 +127,14 @@ export default class ChatScreen extends Component {
                         style={styles.copy}>
                         <Text
                             style={{
-                                color: 'white'
+                                color: 'white',
                             }}>
                             copy
                         </Text>
                     </Pressable>
                 </View>
                 <FlatList
+                    ref={this.listRef}
                     style={{ flex: 1 }}
                     renderItem={this.renderItem}
                     keyExtractor={item => `${item.timestamp}`}
@@ -134,12 +144,12 @@ export default class ChatScreen extends Component {
                     style={{
                         flexDirection: 'row',
                         alignItems: 'center',
-                        marginRight: 16
+                        marginRight: 16,
                     }}>
                     <TextInput
                         style={styles.input}
                         value={input}
-                        placeholder={"type message..."}
+                        placeholder={'type message...'}
                         placeholderTextColor="gray"
                         onChangeText={this.onChangeText}
                     />
@@ -152,7 +162,7 @@ export default class ChatScreen extends Component {
                 </View>
 
             </View>
-        )
+        );
     }
 }
 
@@ -160,25 +170,25 @@ export default class ChatScreen extends Component {
 const styles = StyleSheet.create({
     copy: {
         paddingHorizontal: 8,
-        backgroundColor: "gray"
+        backgroundColor: 'gray',
     },
     send: {
-        color: "black"
+        color: 'black',
     },
     input: {
         padding: 8,
         borderRadius: 16,
         borderWidth: 1,
-        borderColor: "gray",
+        borderColor: 'gray',
         flex: 1,
-        color: 'black'
+        color: 'black',
     },
     chatId: {
         color: 'black',
-        marginLeft: 16
+        marginLeft: 16,
     },
     userName: {
         color: 'black',
-        textAlign: 'right'
+        textAlign: 'right',
     },
-})
+});

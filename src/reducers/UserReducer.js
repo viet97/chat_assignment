@@ -1,17 +1,17 @@
-import ActionType from "../actions/ActionType"
+import ActionType from '../actions/ActionType';
 
 const initialState = {
-    profile: {}
-}
+    profile: {},
+};
 
 export default function UserReducer(state = initialState, action) {
     switch (action.type) {
         case ActionType.SAVE_PROFILE:
             return {
                 ...state,
-                profile: action.data
-            }
+                profile: action.data,
+            };
         default:
-            return state
+            return state;
     }
 }
