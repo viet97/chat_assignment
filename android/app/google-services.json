@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "297921877463",
+    "firebase_url": "https://chat-assignment-3641a-default-rtdb.firebaseio.com",
     "project_id": "chat-assignment-3641a",
     "storage_bucket": "chat-assignment-3641a.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "297921877463-emq93625i08hmu78jm6364bocv63hqum.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chat_assignment",
+            "certificate_hash": "db35dc9e344ea8e0c90ca188f89553c1dd0479ea"
+          }
+        },
         {
           "client_id": "297921877463-hlglgv61qml5ut6ksdkd9ps4mqvka6co.apps.googleusercontent.com",
           "client_type": 1,
